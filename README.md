@@ -34,7 +34,7 @@ We have implemented and evaluated the following architectures:
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **YOLOv11** | 0.7763 | 0.7040 | 0.9108 | 0.7679 | 0.9362 | Fast inference, polygon output |
 | **PraNet** | 0.8118 | 0.7175 | 0.9001 | 0.7847 | 0.9437 | Reverse attention mechanism |
-| **TransUnet** | **0.8361** | **0.7507** | 0.9216 | **0.8096** | **0.9501** | **Current Best Performer (100 Epochs)** |
+| **TransUnet** | **0.8361** | **0.7507** | 0.9216 | **0.8096** | **0.9501** | **Current Best Performer** |
 | **Unet (ResNet34)** | 0.8067 | 0.7185 | **0.9370** | 0.7582 | 0.9419 | Standard baseline |
 | **Unet++ (ResNet34)** | 0.8234 | 0.7382 | 0.9291 | 0.7863 | 0.9462 | Nested U-Net architecture |
 | **nnU-Net (2D)** | 0.8268 | 0.7477 | 0.9306 | 0.7955 | 0.9480 | **Final (1000 Epochs)** |
