@@ -1,45 +1,79 @@
-# FAR-POLYP-SEG — Baseline Segmentation Benchmark Code
+# FAR-POLYP-SEG Baseline Segmentation Code
 
-This repository contains the training and evaluation code for the baseline experiments reported in the **FAR-POLYP-SEG** dataset paper. It benchmarks six deep-learning segmentation architectures on the FAR-POLYP-SEG colonoscopy dataset and additionally evaluates their zero-shot generalization on the public **Kvasir-SEG** dataset (no retraining).
+This repository contains the training and evaluation code for the baseline
+experiments reported in the FAR-POLYP-SEG dataset paper. It benchmarks six
+segmentation architectures on FAR-POLYP-SEG and evaluates the trained models on
+Kvasir-SEG as an unseen external test dataset.
 
-## 1. Dataset
+## Dataset Usage
 
-**FAR-POLYP-SEG** is a prospectively collected colonoscopy dataset of 8,040 frames from 455 patients: 432 polyp-positive frames with pixel-level segmentation masks and 7,608 frames of normal colonic mucosa. The segmentation models in this repository are trained and validated on the 432 mask-bearing (polyp-positive) frames, using patient-level splits so that frames from the same patient never appear in more than one split.
+FAR-POLYP-SEG contains 8,040 colonoscopy frames from 455 patients. The baseline
+segmentation experiments use the 432 polyp-positive frames with pixel-level
+segmentation masks. Patient-level splits are used for the internal benchmark so
+that frames from the same patient do not appear in more than one split.
 
-| Role | Source | Images | Usage |
+| Role | Dataset | Images | Usage |
 | :--- | :--- | :--- | :--- |
-| Source domain (internal) | FAR-POLYP-SEG (polyp-positive frames) | 432 | Patient-level train / validation / test splits; metrics averaged over 5 random seeds |
-| Target domain (external) | [Kvasir-SEG](https://datasets.simula.no/kvasir-seg/) | 1000 | Held-out test set only — never seen during training or validation |
+| Internal benchmark | FAR-POLYP-SEG polyp-positive frames | 432 | Patient-level train, validation, and test splits; metrics averaged over five random seeds |
+| External test | [Kvasir-SEG](https://datasets.simula.no/kvasir-seg/) | 1,000 | Unseen test dataset; not used for training, validation, model selection, or tuning |
 
-## 2. Implemented Models
+## Models
 
-1. **UNet** (`resnet34` encoder) — standard medical-segmentation baseline.
-2. **UNet++** (`resnet34` encoder) — nested U-Net.
-3. **TransUNet** (`mit_b0` encoder) — hybrid CNN–Transformer.
-4. **nnU-Net** (2D) — self-configuring "no-new-Net" framework.
-5. **YOLOv11m-seg** — Ultralytics real-time instance-segmentation model.
-6. **PraNet** — parallel reverse-attention network.
+1. UNet with a ResNet34 encoder
+2. UNet++ with a ResNet34 encoder
+3. TransUNet with a MiT-B0 encoder
+4. nnU-Net 2D
+5. YOLOv11m-seg
+6. PraNet
 
-## 3. Repository Layout
+## Repository Layout
 
+```text
+FAR-POLYP-SEG/
+├── notebooks/
+│   └── internal_benchmark/
+│       ├── unet_internal_benchmark.ipynb
+│       ├── unetpp_internal_benchmark.ipynb
+│       ├── transunet_internal_benchmark.ipynb
+│       ├── nnunet2d_internal_benchmark.ipynb
+│       ├── yolov11_internal_benchmark.ipynb
+│       └── pranet_internal_benchmark.ipynb
+├── scripts/
+│   └── external_test/
+│       ├── unet_kvasir_external_test.py
+│       ├── unetpp_kvasir_external_test.py
+│       ├── transunet_kvasir_external_test.py
+│       ├── nnunet2d_kvasir_external_test.py
+│       ├── yolov11_kvasir_external_test.py
+│       └── pranet_kvasir_external_test.py
+├── .gitignore
+└── README.md
 ```
-no-external-Val/                       # Internal FAR-POLYP-SEG benchmark (5 random seeds, no external validation)
-├── Unet_multi.ipynb
-├── UnetPP_multi.ipynb
-├── TransUnet_multi.ipynb
-├── nnUnet2D_multi_with_Inference.ipynb
-├── YOLOv11_multi.ipynb
-└── PraNet_multi.ipynb
 
-Unet_KVASIR/        Unet_KVASIR_SEG.py        # Train on FAR-POLYP-SEG, evaluate zero-shot on Kvasir-SEG
-UnetPP_KVASIR/      UnetPP_KVASIR_SEG.py
-TransUnet_KVASIR/   TransUnet_KVASIR_SEG.py
-nnUnet2D_KVASIR/    nnUnet2D_KVASIR_SEG.py
-YOLOv11_KVASIR/     YOLOv11_KVASIR_SEG.py
-PraNet_KVASIR/      PraNet_KVASIR_SEG.py
+## Running the Internal Benchmark
+
+Open the model-specific notebook in `notebooks/internal_benchmark/` and run all
+cells. These notebooks train and evaluate models on FAR-POLYP-SEG using the
+internal patient-level benchmark protocol.
+
+## Running External Kvasir-SEG Tests
+
+Run the model-specific script from the repository root:
+
+```bash
+python scripts/external_test/unet_kvasir_external_test.py
+python scripts/external_test/unetpp_kvasir_external_test.py
+python scripts/external_test/transunet_kvasir_external_test.py
+python scripts/external_test/nnunet2d_kvasir_external_test.py
+python scripts/external_test/yolov11_kvasir_external_test.py
+python scripts/external_test/pranet_kvasir_external_test.py
 ```
 
-## 4. Zero-shot Results on Kvasir-SEG
+Each script resolves paths from the repository root, downloads the required
+datasets when needed, trains on FAR-POLYP-SEG, and evaluates on Kvasir-SEG as an
+unseen external test dataset.
+
+## External Test Results
 
 | Model | Dice | IoU | Precision | Recall | Accuracy |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -50,9 +84,5 @@ PraNet_KVASIR/      PraNet_KVASIR_SEG.py
 | YOLOv11m-seg | 0.7763 | 0.7040 | 0.9108 | 0.7679 | 0.9362 |
 | PraNet | 0.8118 | 0.7175 | 0.9001 | 0.7847 | 0.9437 |
 
-Internal FAR-POLYP-SEG test-set results (mean ± standard deviation over 5 seeds), per-image inference latency, and the full comparison are reported in the paper.
-
-## 5. Reproducing
-
-- **Internal benchmark** — run the notebook for each architecture in `no-external-Val/`.
-- **External validation** — `cd <Model>_KVASIR && python <Model>_KVASIR_SEG.py`. Each script downloads the datasets, prepares the masks/polygons, trains on FAR-POLYP-SEG, and evaluates on Kvasir-SEG.
+Internal FAR-POLYP-SEG test-set results, per-image inference latency, and the full
+comparison are reported in the paper.

@@ -1,0 +1,27 @@
+# Downloaded datasets and archives
+data/
+Kvasir-SEG/
+*.zip
+
+# Model outputs and experiment artifacts
+*_results/
+results/
+runs/
+yolo_kvasir_dataset/
+nnUNet_raw/
+nnUNet_preprocessed/
+nnUNet_results/
+*.pth
+*.pt
+*.onnx
+*.nii.gz
+*.log
+*_metrics*.txt
+
+# Python and notebook cache files
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Operating-system files
+.DS_Store

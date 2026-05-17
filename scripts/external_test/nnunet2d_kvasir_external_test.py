@@ -20,7 +20,8 @@ DATASET_ID = 501
 TASK_NAME = f"Dataset{DATASET_ID:03d}_Polyp"
 
 # Environment Setup
-ROOT_DIR = os.getcwd()
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+os.chdir(ROOT_DIR)
 NNUNET_RAW = os.path.join(ROOT_DIR, "nnUNet_raw")
 NNUNET_PREPROCESSED = os.path.join(ROOT_DIR, "nnUNet_preprocessed")
 NNUNET_RESULTS = os.path.join(ROOT_DIR, "nnUNet_results")
@@ -45,7 +46,7 @@ print("\n--- Step 1: Downloading Data ---")
 # Primary Data
 file_id = '1Bv7zmjJVvE7uQbbjwRa-3qn-BI8h99KI'
 url = f'https://drive.google.com/uc?id={file_id}'
-output = 'data.zip'
+output = os.path.join(ROOT_DIR, "data.zip")
 
 if not os.path.exists(output):
     print("Downloading data.zip...")
@@ -54,12 +55,12 @@ if not os.path.exists(output):
 if os.path.exists(output) and not os.path.exists(os.path.join(ROOT_DIR, "data")):
     print("Unzipping Training Data...")
     with zipfile.ZipFile(output, 'r') as zip_ref:
-        zip_ref.extractall("data")
+        zip_ref.extractall(os.path.join(ROOT_DIR, "data"))
     print("✅ Training Data ready.")
 
 # KVASIR-SEG
 kvasir_url = "https://datasets.simula.no/downloads/kvasir-seg.zip"
-kvasir_output = "kvasir-seg.zip"
+kvasir_output = os.path.join(ROOT_DIR, "kvasir-seg.zip")
 
 if not os.path.exists(kvasir_output):
     print(f"Downloading Kvasir-SEG from {kvasir_url}...")
@@ -263,7 +264,7 @@ for case_id in test_ids:
 avg_scores = {k: np.mean(v) for k, v in scores.items()}
 
 print(f"\n{'='*40}")
-print(f"🔹 KVASIR-SEG Validation Results (nnU-Net 2D) 🔹")
+print(f"🔹 KVASIR-SEG External Test Results (nnU-Net 2D) 🔹")
 print(f"{'='*40}")
 print(f"Dice Coefficient : {avg_scores['dice']:.4f}")
 print(f"IoU (Jaccard)    : {avg_scores['iou']:.4f}")

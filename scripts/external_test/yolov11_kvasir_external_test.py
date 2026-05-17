@@ -31,8 +31,9 @@ from PIL import Image
 from tqdm import tqdm
 
 # --- Configuration ---
-# Use current directory for remote execution
-ROOT_DIR = os.getcwd()
+# Resolve paths from the repository root
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+os.chdir(ROOT_DIR)
 YOLO_ROOT = os.path.join(ROOT_DIR, "yolo_kvasir_dataset")
 DATA_DIR = os.path.join(ROOT_DIR, "data")
 TRAIN_IMG_DIR = os.path.join(DATA_DIR, "data/images")
@@ -47,7 +48,7 @@ print(f"Working Directory: {ROOT_DIR}")
 print("\n--- Step 1: Training Data ---")
 file_id = '1Bv7zmjJVvE7uQbbjwRa-3qn-BI8h99KI'
 url = f'https://drive.google.com/uc?id={file_id}'
-output = 'data.zip'
+output = os.path.join(ROOT_DIR, "data.zip")
 
 if not os.path.exists(output):
     print("Downloading data.zip...")
@@ -57,16 +58,16 @@ if os.path.exists(output) and not os.path.exists(os.path.join(DATA_DIR, "data"))
     print("Unzipping Training Data...")
     import zipfile
     print("Unzipping Training Data...")
-    with zipfile.ZipFile("data.zip", 'r') as zip_ref:
-        zip_ref.extractall("data")
+    with zipfile.ZipFile(output, 'r') as zip_ref:
+        zip_ref.extractall(os.path.join(ROOT_DIR, "data"))
     print("✅ Training Data ready.")
 else:
     print("✅ Training Data already extracted.")
 
-# --- 2. Download KVASIR-SEG Validation Data ---
-print("\n--- Step 2: Validation Data (KVASIR-SEG) ---")
+# --- 2. Download KVASIR-SEG External Test Data ---
+print("\n--- Step 2: External Test Data (KVASIR-SEG) ---")
 kvasir_url = "https://datasets.simula.no/downloads/kvasir-seg.zip"
-kvasir_output = "kvasir-seg.zip"
+kvasir_output = os.path.join(ROOT_DIR, "kvasir-seg.zip")
 
 if not os.path.exists(kvasir_output):
     print(f"Downloading Kvasir-SEG from {kvasir_url}...")
@@ -125,7 +126,7 @@ def mask_to_yolo_polygon(mask_path):
     return polygons
 
 def prepare_yolo_dataset():
-    """Prepares the YOLO dataset structure with Train (all files) and Val (KVASIR)."""
+    """Prepares the YOLO dataset structure with Train/Val from FAR-POLYP-SEG and Test from Kvasir-SEG."""
     print("\n--- Step 3: Preparing YOLO Dataset ---")
     
     import random
@@ -247,8 +248,8 @@ results = model.train(
     verbose=True
 )
 
-# --- 5. External Validation on KVASIR-SEG ---
-print("\n--- Step 5: Detailed Validation on KVASIR-SEG ---")
+# --- 5. External Test on KVASIR-SEG ---
+print("\n--- Step 5: Detailed External Test on KVASIR-SEG ---")
 
 best_model_path = os.path.join(ROOT_DIR, "yolo_kvasir_results/train_all_val_kvasir/weights/best.pt")
 if os.path.exists(best_model_path):
@@ -300,7 +301,7 @@ for result in tqdm(results, desc="Evaluating"):
 
 avg_scores = {k: np.mean(v) for k, v in scores.items()}
 print(f"\n{'='*40}")
-print(f"🔹 KVASIR-SEG Validation Results 🔹")
+print(f"🔹 KVASIR-SEG External Test Results 🔹")
 print(f"{'='*40}")
 print(f"Dice Coefficient : {avg_scores['dice']:.4f}")
 print(f"IoU (Jaccard)    : {avg_scores['iou']:.4f}")
