@@ -20,7 +20,7 @@ DATASET_ID = 501
 TASK_NAME = f"Dataset{DATASET_ID:03d}_Polyp"
 
 # Environment Setup
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 os.chdir(ROOT_DIR)
 NNUNET_RAW = os.path.join(ROOT_DIR, "nnUNet_raw")
 NNUNET_PREPROCESSED = os.path.join(ROOT_DIR, "nnUNet_preprocessed")
