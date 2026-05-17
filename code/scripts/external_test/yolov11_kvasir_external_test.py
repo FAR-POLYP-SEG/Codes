@@ -32,7 +32,7 @@ from tqdm import tqdm
 
 # --- Configuration ---
 # Resolve paths from the repository root
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
 os.chdir(ROOT_DIR)
 YOLO_ROOT = os.path.join(ROOT_DIR, "yolo_kvasir_dataset")
 DATA_DIR = os.path.join(ROOT_DIR, "data")

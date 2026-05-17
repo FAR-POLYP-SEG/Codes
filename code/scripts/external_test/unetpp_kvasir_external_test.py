@@ -32,7 +32,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
 # Paths
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
 os.chdir(ROOT_DIR)
 DATA_DIR = os.path.join(ROOT_DIR, "data") # Primary dataset root
 TRAIN_IMG_DIR = os.path.join(DATA_DIR, "data/images")
@@ -42,7 +42,7 @@ KVASIR_DIR = os.path.join(ROOT_DIR, "Kvasir-SEG")
 KVASIR_IMG_DIR = os.path.join(KVASIR_DIR, "images")
 KVASIR_MASK_DIR = os.path.join(KVASIR_DIR, "masks")
 
-RESULTS_DIR = os.path.join(ROOT_DIR, "transunet_results_200")
+RESULTS_DIR = os.path.join(ROOT_DIR, "unetpp_results")
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 # --- 1. Data Download ---
@@ -206,10 +206,9 @@ train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_worker
 val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
 
-# --- 4. Model Architecture (TransUnet via SMP) ---
-# Using Unet with mit_b0 encoder (Transformer-based)
-model = smp.Unet(
-    encoder_name="mit_b0",
+# --- 4. Model Architecture (Unet++ via SMP) ---
+model = smp.UnetPlusPlus(
+    encoder_name="resnet34",
     encoder_weights="imagenet",
     in_channels=3,
     classes=1,
@@ -231,7 +230,7 @@ def validate(model, loader):
     return val_loss / len(loader)
 
 def train_and_validate():
-    print("\n--- Step 3: Starting Training (TransUnet) ---")
+    print("\n--- Step 3: Starting Training (Unet++ ResNet34) ---")
     
     best_loss = float('inf')
     EPOCHS = 100
@@ -269,8 +268,8 @@ def train_and_validate():
 def evaluate_test_set():
     print("\n--- Step 4: Final Evaluation on KVASIR (Test Set) ---")
     
-    model = smp.Unet(
-        encoder_name="mit_b0",
+    model = smp.UnetPlusPlus(
+        encoder_name="resnet34",
         encoder_weights="imagenet",
         in_channels=3,
         classes=1,
@@ -300,7 +299,7 @@ def evaluate_test_set():
     avg_scores = {k: np.mean(v) for k, v in scores.items()}
     
     print(f"\n{'='*40}")
-    print(f"🔹 KVASIR-SEG External Test Results (TransUnet) 🔹")
+    print(f"🔹 KVASIR-SEG External Test Results (Unet++) 🔹")
     print(f"{'='*40}")
     print(f"Dice Coefficient : {avg_scores['dice']:.4f}")
     print(f"IoU (Jaccard)    : {avg_scores['iou']:.4f}")
@@ -310,7 +309,7 @@ def evaluate_test_set():
     print(f"{'='*40}")
     
     # Save results to a file for easy reading
-    with open("transunet_kvasir_metrics_200.txt", "w") as f:
+    with open("unetpp_kvasir_metrics.txt", "w") as f:
         f.write(str(avg_scores))
 
 if __name__ == "__main__":

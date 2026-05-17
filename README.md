@@ -30,29 +30,30 @@ that frames from the same patient do not appear in more than one split.
 
 ```text
 FAR-POLYP-SEG/
-├── notebooks/
-│   └── internal_benchmark/
-│       ├── unet_internal_benchmark.ipynb
-│       ├── unetpp_internal_benchmark.ipynb
-│       ├── transunet_internal_benchmark.ipynb
-│       ├── nnunet2d_internal_benchmark.ipynb
-│       ├── yolov11_internal_benchmark.ipynb
-│       └── pranet_internal_benchmark.ipynb
-├── scripts/
-│   └── external_test/
-│       ├── unet_kvasir_external_test.py
-│       ├── unetpp_kvasir_external_test.py
-│       ├── transunet_kvasir_external_test.py
-│       ├── nnunet2d_kvasir_external_test.py
-│       ├── yolov11_kvasir_external_test.py
-│       └── pranet_kvasir_external_test.py
+├── code/
+│   ├── notebooks/
+│   │   └── internal_benchmark/
+│   │       ├── unet_internal_benchmark.ipynb
+│   │       ├── unetpp_internal_benchmark.ipynb
+│   │       ├── transunet_internal_benchmark.ipynb
+│   │       ├── nnunet2d_internal_benchmark.ipynb
+│   │       ├── yolov11_internal_benchmark.ipynb
+│   │       └── pranet_internal_benchmark.ipynb
+│   ├── scripts/
+│   │   └── external_test/
+│   │       ├── unet_kvasir_external_test.py
+│   │       ├── unetpp_kvasir_external_test.py
+│   │       ├── transunet_kvasir_external_test.py
+│   │       ├── nnunet2d_kvasir_external_test.py
+│   │       ├── yolov11_kvasir_external_test.py
+│   │       └── pranet_kvasir_external_test.py
 ├── .gitignore
 └── README.md
 ```
 
 ## Running the Internal Benchmark
 
-Open the model-specific notebook in `notebooks/internal_benchmark/` and run all
+Open the model-specific notebook in `code/notebooks/internal_benchmark/` and run all
 cells. These notebooks train and evaluate models on FAR-POLYP-SEG using the
 internal patient-level benchmark protocol.
 
@@ -61,12 +62,12 @@ internal patient-level benchmark protocol.
 Run the model-specific script from the repository root:
 
 ```bash
-python scripts/external_test/unet_kvasir_external_test.py
-python scripts/external_test/unetpp_kvasir_external_test.py
-python scripts/external_test/transunet_kvasir_external_test.py
-python scripts/external_test/nnunet2d_kvasir_external_test.py
-python scripts/external_test/yolov11_kvasir_external_test.py
-python scripts/external_test/pranet_kvasir_external_test.py
+python code/scripts/external_test/unet_kvasir_external_test.py
+python code/scripts/external_test/unetpp_kvasir_external_test.py
+python code/scripts/external_test/transunet_kvasir_external_test.py
+python code/scripts/external_test/nnunet2d_kvasir_external_test.py
+python code/scripts/external_test/yolov11_kvasir_external_test.py
+python code/scripts/external_test/pranet_kvasir_external_test.py
 ```
 
 Each script resolves paths from the repository root, downloads the required
