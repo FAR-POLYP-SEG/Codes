@@ -7,7 +7,7 @@ Kvasir-SEG as an unseen external test dataset.
 
 ## Dataset Usage
 
-FAR-POLYP-SEG contains 8,040 colonoscopy frames from 455 patients. The baseline
+FAR-POLYP-SEG contains 8,181 colonoscopy frames from 455 patients. The baseline
 segmentation experiments use the 432 polyp-positive frames with pixel-level
 segmentation masks. Patient-level splits are used for the internal benchmark so
 that frames from the same patient do not appear in more than one split.
