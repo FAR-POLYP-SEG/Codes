@@ -30,6 +30,7 @@ that frames from the same patient do not appear in more than one split.
 
 ```text
 FAR-POLYP-SEG/
+├── data.zip
 ├── code/
 │   ├── internal/
 │   │   ├── unet_internal_benchmark.ipynb
